@@ -14,11 +14,11 @@
 		0FE15B2E186ACEF400110D6F /* SymonAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FE15B2D186ACEF400110D6F /* SymonAppDelegate.m */; };
 		0FE15B31186ACEF400110D6F /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FE15B2F186ACEF400110D6F /* MainMenu.xib */; };
 		0FE15B33186ACEF400110D6F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0FE15B32186ACEF400110D6F /* Images.xcassets */; };
-		0FE15B51186AD05600110D6F /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE15B50186AD05600110D6F /* Syphon.framework */; };
-		0FE15B53186AD0A000110D6F /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0FE15B50186AD05600110D6F /* Syphon.framework */; };
 		0FE15B56186AD0F000110D6F /* SymonGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FE15B55186AD0F000110D6F /* SymonGLView.m */; };
 		0FE15B58186AD25400110D6F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE15B57186AD25400110D6F /* OpenGL.framework */; };
 		0FE15B5A186AD26200110D6F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE15B59186AD26200110D6F /* CoreVideo.framework */; };
+		0FE15B5C186AD8B200110D6F /* Syphon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE15B5B186AD8B200110D6F /* Syphon.framework */; };
+		0FE15B5D186AD8D200110D6F /* Syphon.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0FE15B5B186AD8B200110D6F /* Syphon.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,7 +28,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0FE15B53186AD0A000110D6F /* Syphon.framework in CopyFiles */,
+				0FE15B5D186AD8D200110D6F /* Syphon.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -50,11 +50,11 @@
 		0FE15B30186ACEF400110D6F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		0FE15B32186ACEF400110D6F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		0FE15B39186ACEF400110D6F /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		0FE15B50186AD05600110D6F /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Syphon.framework; sourceTree = "<group>"; };
 		0FE15B54186AD0F000110D6F /* SymonGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SymonGLView.h; sourceTree = "<group>"; };
 		0FE15B55186AD0F000110D6F /* SymonGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SymonGLView.m; sourceTree = "<group>"; };
 		0FE15B57186AD25400110D6F /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		0FE15B59186AD26200110D6F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		0FE15B5B186AD8B200110D6F /* Syphon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Syphon.framework; path = ../Syphon.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,10 +62,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0FE15B5C186AD8B200110D6F /* Syphon.framework in Frameworks */,
 				0FE15B5A186AD26200110D6F /* CoreVideo.framework in Frameworks */,
 				0FE15B58186AD25400110D6F /* OpenGL.framework in Frameworks */,
 				0FE15B1B186ACEF400110D6F /* Cocoa.framework in Frameworks */,
-				0FE15B51186AD05600110D6F /* Syphon.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,9 +92,9 @@
 		0FE15B19186ACEF400110D6F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0FE15B5B186AD8B200110D6F /* Syphon.framework */,
 				0FE15B59186AD26200110D6F /* CoreVideo.framework */,
 				0FE15B57186AD25400110D6F /* OpenGL.framework */,
-				0FE15B50186AD05600110D6F /* Syphon.framework */,
 				0FE15B1A186ACEF400110D6F /* Cocoa.framework */,
 				0FE15B39186ACEF400110D6F /* XCTest.framework */,
 				0FE15B1C186ACEF400110D6F /* Other Frameworks */,
@@ -318,6 +318,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/keijiro/Documents/Syphon/Symon,
+					/Users/keijiro/Documents/Syphon,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Symon/Symon-Prefix.pch";
@@ -335,6 +336,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/keijiro/Documents/Syphon/Symon,
+					/Users/keijiro/Documents/Syphon,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Symon/Symon-Prefix.pch";
@@ -363,6 +365,7 @@
 				0FE15B4A186ACEF400110D6F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
