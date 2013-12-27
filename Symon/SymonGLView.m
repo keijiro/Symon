@@ -34,28 +34,35 @@
     self.pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
     self.openGLContext = [[NSOpenGLContext alloc] initWithFormat:self.pixelFormat shareContext:nil];
     
-    [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateServerList:) userInfo:self repeats:YES];
+    [NSTimer scheduledTimerWithTimeInterval:0.3f target:self selector:@selector(updateServerList:) userInfo:self repeats:YES];
 }
 
 #pragma mark Server communication
 
 - (void)updateServerList:(id)sender
 {
+    // Releases the client if it got invalid.
+    if (_syphonClient && !_syphonClient.isValid) _syphonClient = nil;
+    
+    // Retrives the server list.
     NSArray *servers = [[SyphonServerDirectory sharedDirectory] servers];
+    
+    // Is there any server?
     if (servers.count > 0)
     {
-        if (_syphonClient == nil)
-        {
-            [self startClient:[servers objectAtIndex:0]];
-        }
+        // Uses the first server.
+        NSDictionary *serverDescription = [servers objectAtIndex:0];
+        
+        // Releases the old client if it's different from this one.
+        if (![serverDescription isEqualToDictionary:_syphonClient.serverDescription]) _syphonClient = nil;
+        
+        // Creates a client if there is no server.
+        if (_syphonClient == nil) [self startClient:serverDescription];
     }
     else
     {
-        if (_syphonClient)
-        {
-            [_syphonClient stop];
-            _syphonClient = nil;
-        }
+        // No server: it should be released.
+        if (_syphonClient) _syphonClient = nil;
     }
 }
 
