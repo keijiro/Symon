@@ -9,29 +9,12 @@
 @interface SymonGLView ()
 {
     SyphonClient *_syphonClient;
-    CVDisplayLinkRef _displayLink;
 }
 
 - (void)updateServerList:(id)sender;
 - (void)startClient:(NSDictionary *)description;
-- (void)drawView;
 
 @end
-
-#pragma mark
-#pragma mark DisplayLink Callbacks
-
-static CVReturn DisplayLinkOutputCallback(CVDisplayLinkRef displayLink,
-                                          const CVTimeStamp *now,
-                                          const CVTimeStamp *outputTime,
-                                          CVOptionFlags flagsIn,
-                                          CVOptionFlags *flagsOut,
-                                          void *displayLinkContext)
-{
-    SymonGLView *view = (__bridge SymonGLView *)displayLinkContext;
-    [view drawView];
-	return kCVReturnSuccess;
-}
 
 #pragma mark
 #pragma mark Class implementation
@@ -44,8 +27,7 @@ static CVReturn DisplayLinkOutputCallback(CVDisplayLinkRef displayLink,
 {
     NSOpenGLPixelFormatAttribute attributes[] = {
         NSOpenGLPFADoubleBuffer,
-        NSOpenGLPFAPixelBuffer,
-        NSOpenGLPFAColorSize, 32,
+        NSOpenGLPFAColorSize, 24,
         0
     };
     
@@ -53,12 +35,6 @@ static CVReturn DisplayLinkOutputCallback(CVDisplayLinkRef displayLink,
     self.openGLContext = [[NSOpenGLContext alloc] initWithFormat:self.pixelFormat shareContext:nil];
     
     [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateServerList:) userInfo:self repeats:YES];
-}
-
-- (void)dealloc
-{
-    CVDisplayLinkStop(_displayLink);
-    CVDisplayLinkRelease(_displayLink);
 }
 
 #pragma mark Server communication
@@ -85,7 +61,9 @@ static CVReturn DisplayLinkOutputCallback(CVDisplayLinkRef displayLink,
 
 - (void)startClient:(NSDictionary *)description
 {
-    _syphonClient = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:nil];
+    _syphonClient = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
+        [self drawView];
+    }];
 }
 
 #pragma mark NSOpenGLView methods
@@ -94,34 +72,12 @@ static CVReturn DisplayLinkOutputCallback(CVDisplayLinkRef displayLink,
 {
     [super prepareOpenGL];
     
-    // Maximize framerate.
-    GLint interval = 1;
+    // Disable vsync.
+    GLint interval = 0;
     [self.openGLContext setValues:&interval forParameter:NSOpenGLCPSwapInterval];
-    
-    // Initialize DisplayLink.
-    CVDisplayLinkCreateWithActiveCGDisplays(&_displayLink);
-    CVDisplayLinkSetOutputCallback(_displayLink, DisplayLinkOutputCallback, (__bridge void *)(self));
-    
-    CGLContextObj cglCtx = (CGLContextObj)(self.openGLContext.CGLContextObj);
-    CGLPixelFormatObj cglPF = (CGLPixelFormatObj)(self.pixelFormat.CGLPixelFormatObj);
-    CVDisplayLinkSetCurrentCGDisplayFromOpenGLContext(_displayLink, cglCtx, cglPF);
-    
-    CVDisplayLinkStart(_displayLink);
-    
-    // Add an observer for closing the window.
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(windowWillClose:)
-                                                 name:NSWindowWillCloseNotification
-                                               object:self.window];
 }
 
 #pragma mark NSWindow methods
-
-- (void)windowWillClose:(NSNotification *)notification
-{
-    // DisplayLink need to be stopped manually.
-    CVDisplayLinkStop(_displayLink);
-}
 
 - (void)drawRect:(NSRect)dirtyRect
 {
@@ -135,9 +91,6 @@ static CVReturn DisplayLinkOutputCallback(CVDisplayLinkRef displayLink,
     CGLContextObj cglCtx = (CGLContextObj)(self.openGLContext.CGLContextObj);
     
     CGSize size = self.frame.size;
-    
-    // Lock DisplayLink.
-    CGLLockContext(cglCtx);
     
     [self.openGLContext makeCurrentContext];
     
@@ -186,9 +139,7 @@ static CVReturn DisplayLinkOutputCallback(CVDisplayLinkRef displayLink,
     
     image = nil;
     
-    // Flush and unlock DisplayLink.
     CGLFlushDrawable(cglCtx);
-    CGLUnlockContext(cglCtx);
 }
 
 @end

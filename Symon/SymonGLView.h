@@ -2,4 +2,6 @@
 
 @interface SymonGLView : NSOpenGLView
 
+- (void)drawView;
+
 @end
