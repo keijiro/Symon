@@ -4,16 +4,60 @@
 
 @implementation SymonAppDelegate
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+#pragma mark Private methods
+
+- (void)connectToAvailableServer
 {
+    NSArray *servers = SyphonServerDirectory.sharedDirectory.servers;
+    if (servers.count > 0)
+    {
+        [_symonGLView connect:servers.lastObject];
+    }
+    else
+    {
+        [_symonGLView connect:nil];
+    }
 }
+
+#pragma mark Message handling
 
 - (IBAction)serverSelect:(id)sender
 {
+    // Connect to the chosen server.
+    NSArray *servers = SyphonServerDirectory.sharedDirectory.servers;
     NSInteger index = [sender tag];
-    NSArray *servers = [[SyphonServerDirectory sharedDirectory] servers];
     [_symonGLView connect:servers[index]];
 }
+
+- (void)serverAnnounced:(NSNotification *)notification
+{
+    if (!_symonGLView.client)
+    {
+        [_symonGLView connect:notification.object];
+    }
+}
+
+- (void)serverRetired:(NSNotification *)notification
+{
+    NSDictionary *desc = notification.object;
+    NSString *uuid = desc[SyphonServerDescriptionUUIDKey];
+    NSString *currentUUID = _symonGLView.client.serverDescription[SyphonServerDescriptionUUIDKey];
+    if ([uuid isEqualToString:currentUUID])
+    {
+        [self connectToAvailableServer];
+    }
+}
+
+#pragma mark NSApplicationDelegate
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverAnnounced:) name:SyphonServerAnnounceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverRetired:) name:SyphonServerRetireNotification object:nil];
+    [self connectToAvailableServer];
+}
+
+#pragma mark NSMenuDelegate
 
 - (NSInteger)numberOfItemsInMenu:(NSMenu*)menu
 {
@@ -26,15 +70,34 @@
     NSArray *servers = [[SyphonServerDirectory sharedDirectory] servers];
     if (index >= servers.count)
     {
+        // No server case.
         item.title = @"No Server";
         item.action = nil;
     }
     else
     {
-        NSDictionary *desc = servers[index];
-        item.title = desc[SyphonServerDescriptionNameKey];
+        NSDictionary *description = servers[index];
+        NSString *appName = description[SyphonServerDescriptionAppNameKey];
+        NSString *serverName = description[SyphonServerDescriptionNameKey];
+        NSString *uuid = description[SyphonServerDescriptionUUIDKey];
+        
+        // Make a title for the item.
+        if (appName.length && serverName.length)
+        {
+            item.title = [NSString stringWithFormat:@"%@ (%@)", appName, serverName];
+        }
+        else
+        {
+            item.title = appName.length ? appName : serverName;
+        }
+        
+        // Bind an action to the item.
         item.action = @selector(serverSelect:);
         item.tag = index;
+        
+        // Put on-state mark if the server is currently used.
+        id currentUUID = _symonGLView.client.serverDescription[SyphonServerDescriptionUUIDKey];
+        item.state = [uuid isEqualTo:currentUUID] ? NSOnState : NSOffState;
     }
     return YES;
 }

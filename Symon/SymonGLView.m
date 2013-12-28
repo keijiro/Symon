@@ -6,7 +6,7 @@
 
 @interface SymonGLView ()
 {
-    SyphonClient *_syphonClient;
+    SyphonClient *_client;
 }
 @end
 
@@ -19,10 +19,17 @@
 
 - (void)connect:(NSDictionary *)description;
 {
-    // Create a new Syphon client with the server description.
-    _syphonClient = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
-        [self drawSyphonFrame];
-    }];
+    if (description)
+    {
+        // Create a new Syphon client with the server description.
+        _client = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
+            [self drawSyphonFrame];
+        }];
+    }
+    else
+    {
+        _client = nil;
+    }
 }
 
 #pragma mark NSOpenGLView methods
@@ -39,7 +46,7 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     // Clear the window if there is no valid connection.
-    if (!_syphonClient || _syphonClient.isValid)
+    if (!_client || _client.isValid)
     {
         glClearColor(0.5f, 0.5f, 0.5f, 0);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -55,7 +62,7 @@
     [self.openGLContext makeCurrentContext];
     
     // Try to retrieve a frame image from the Syphon client.
-    SyphonImage *image = [_syphonClient newFrameImageForContext:self.openGLContext.CGLContextObj];
+    SyphonImage *image = [_client newFrameImageForContext:self.openGLContext.CGLContextObj];
     
     // Do nothing if it failed.
     if (image == nil) return;
