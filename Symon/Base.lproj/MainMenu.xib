@@ -117,21 +117,53 @@
                         </items>
                     </menu>
                 </menuItem>
+                <menuItem title="Connection" id="cnd-0Y-Pk3">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <menu key="submenu" title="Connection" id="ryA-Hk-Nf5">
+                        <items>
+                            <menuItem title="Item 1" id="CcY-U4-qFl">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem title="Item 2" id="UeA-OI-efh">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                            <menuItem title="Item 3" id="IW1-DH-3ed">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
+                        </items>
+                        <connections>
+                            <outlet property="delegate" destination="494" id="Dbn-kv-ge4"/>
+                        </connections>
+                    </menu>
+                </menuItem>
             </items>
         </menu>
         <window title="Symon" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="371">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="480" height="360"/>
+            <rect key="contentRect" x="335" y="390" width="512" height="300"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
-            <view key="contentView" id="372" customClass="SymonGLView">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
+            <view key="contentView" id="372">
+                <rect key="frame" x="0.0" y="0.0" width="512" height="300"/>
                 <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <openGLView colorSize="8bit_RGB" rendererType="accelerated" useAuxiliaryDepthBufferStencil="NO" useDoubleBufferingEnabled="YES" wantsBestResolutionOpenGLSurface="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FhG-lL-gEX" customClass="SymonGLView">
+                        <rect key="frame" x="0.0" y="0.0" width="512" height="300"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </openGLView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="FhG-lL-gEX" firstAttribute="leading" secondItem="372" secondAttribute="leading" id="Ang-1D-MlW"/>
+                    <constraint firstAttribute="trailing" secondItem="FhG-lL-gEX" secondAttribute="trailing" id="OCF-Fd-7eo"/>
+                    <constraint firstAttribute="bottom" secondItem="FhG-lL-gEX" secondAttribute="bottom" id="VEG-g9-wzr"/>
+                    <constraint firstItem="FhG-lL-gEX" firstAttribute="top" secondItem="372" secondAttribute="top" id="Viu-nf-mMg"/>
+                </constraints>
             </view>
         </window>
         <customObject id="494" customClass="SymonAppDelegate">
             <connections>
+                <outlet property="symonGLView" destination="FhG-lL-gEX" id="TXu-AA-WPO"/>
                 <outlet property="window" destination="371" id="532"/>
             </connections>
         </customObject>

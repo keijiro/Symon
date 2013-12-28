@@ -10,10 +10,6 @@
 {
     SyphonClient *_syphonClient;
 }
-
-- (void)updateServerList:(id)sender;
-- (void)startClient:(NSDictionary *)description;
-
 @end
 
 #pragma mark
@@ -21,52 +17,9 @@
 
 @implementation SymonGLView
 
-#pragma mark Constructor and destructor
-
-- (void)awakeFromNib
-{
-    NSOpenGLPixelFormatAttribute attributes[] = {
-        NSOpenGLPFADoubleBuffer,
-        NSOpenGLPFAColorSize, 24,
-        0
-    };
-    
-    self.pixelFormat = [[NSOpenGLPixelFormat alloc] initWithAttributes:attributes];
-    self.openGLContext = [[NSOpenGLContext alloc] initWithFormat:self.pixelFormat shareContext:nil];
-    
-    [NSTimer scheduledTimerWithTimeInterval:0.3f target:self selector:@selector(updateServerList:) userInfo:self repeats:YES];
-}
-
 #pragma mark Server communication
 
-- (void)updateServerList:(id)sender
-{
-    // Releases the client if it got invalid.
-    if (_syphonClient && !_syphonClient.isValid) _syphonClient = nil;
-    
-    // Retrives the server list.
-    NSArray *servers = [[SyphonServerDirectory sharedDirectory] servers];
-    
-    // Is there any server?
-    if (servers.count > 0)
-    {
-        // Uses the first server.
-        NSDictionary *serverDescription = [servers objectAtIndex:0];
-        
-        // Releases the old client if it's different from this one.
-        if (![serverDescription isEqualToDictionary:_syphonClient.serverDescription]) _syphonClient = nil;
-        
-        // Creates a client if there is no server.
-        if (_syphonClient == nil) [self startClient:serverDescription];
-    }
-    else
-    {
-        // No server: it should be released.
-        if (_syphonClient) _syphonClient = nil;
-    }
-}
-
-- (void)startClient:(NSDictionary *)description
+- (void)connect:(NSDictionary *)description;
 {
     _syphonClient = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
         [self drawView];
@@ -97,13 +50,13 @@
 {
     CGLContextObj cglCtx = (CGLContextObj)(self.openGLContext.CGLContextObj);
     
-    CGSize size = self.frame.size;
+    CGSize size = [self convertSizeToBacking:self.bounds.size];
     
     [self.openGLContext makeCurrentContext];
     
     SyphonImage *image = nil;
     
-    if (_syphonClient)
+    if (_syphonClient && _syphonClient.isValid)
     {
         image = [_syphonClient newFrameImageForContext:cglCtx];
     }

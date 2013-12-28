@@ -2,6 +2,6 @@
 
 @interface SymonGLView : NSOpenGLView
 
-- (void)drawView;
+- (void)connect:(NSDictionary *)description;
 
 @end
