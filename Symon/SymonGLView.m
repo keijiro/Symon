@@ -1,10 +1,8 @@
 #import "SymonGLView.h"
-#import "Syphon/Syphon.h"
+#import <Syphon/Syphon.h>
 #import <OpenGL/OpenGL.h>
-#import <OpenGL/glu.h>
 
-#pragma mark
-#pragma mark Private members
+#pragma mark Private variables
 
 @interface SymonGLView ()
 {
@@ -17,12 +15,13 @@
 
 @implementation SymonGLView
 
-#pragma mark Server communication
+#pragma mark Public methods
 
 - (void)connect:(NSDictionary *)description;
 {
+    // Create a new Syphon client with the server description.
     _syphonClient = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
-        [self drawView];
+        [self drawSyphonFrame];
     }];
 }
 
@@ -32,74 +31,60 @@
 {
     [super prepareOpenGL];
     
-    // Disable vsync.
+    // Disable VSync.
     GLint interval = 0;
     [self.openGLContext setValues:&interval forParameter:NSOpenGLCPSwapInterval];
 }
 
-#pragma mark NSWindow methods
-
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [self drawView];
+    // Clear the window if there is no valid connection.
+    if (!_syphonClient || _syphonClient.isValid)
+    {
+        glClearColor(0.5f, 0.5f, 0.5f, 0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        [self.openGLContext flushBuffer];
+    }
 }
 
 #pragma mark Private methods
 
-- (void)drawView
+- (void)drawSyphonFrame
 {
-    CGLContextObj cglCtx = (CGLContextObj)(self.openGLContext.CGLContextObj);
-    
-    CGSize size = [self convertSizeToBacking:self.bounds.size];
-    
+    // Activate the GL context.
     [self.openGLContext makeCurrentContext];
     
-    SyphonImage *image = nil;
+    // Try to retrieve a frame image from the Syphon client.
+    SyphonImage *image = [_syphonClient newFrameImageForContext:self.openGLContext.CGLContextObj];
     
-    if (_syphonClient && _syphonClient.isValid)
-    {
-        image = [_syphonClient newFrameImageForContext:cglCtx];
-    }
-
-    glViewport(0, 0, size.width, size.height);
+    // Do nothing if it failed.
+    if (image == nil) return;
     
-    if (image)
-    {
-        glDisable(GL_BLEND);
-        glEnable(GL_TEXTURE_RECTANGLE_ARB);
-        glBindTexture(GL_TEXTURE_RECTANGLE_ARB, image.textureName);
-        
-        glBegin(GL_QUADS);
-        
-        glColor3f(1, 1, 1);
-        
-        NSSize size = image.textureSize;
-        glTexCoord2f(0, 0);
-        glVertex2f(-1, -1);
-        
-        glTexCoord2f(size.width, 0);
-        glVertex2f(1, -1);
-        
-        glTexCoord2f(size.width, size.height);
-        glVertex2f(1, 1);
-        
-        glTexCoord2f(0, size.height);
-        glVertex2f(-1, 1);
-        
-        glEnd();
-        
-        glDisable(GL_TEXTURE_RECTANGLE_ARB);
-        glEnable(GL_BLEND);
-    }
-    else
-    {
-        glClearColor(0.5f, 0.5f, 0.5f, 0);
-        glClear(GL_COLOR_BUFFER_BIT);
-    }
+    // Retrieve the actual screen size and set it to the viewport.
+    CGSize screenSize = [self convertSizeToBacking:self.bounds.size];
+    glViewport(0, 0, screenSize.width, screenSize.height);
     
-    image = nil;
+    // Draw context settings.
+    glDisable(GL_BLEND);
+    glEnable(GL_TEXTURE_RECTANGLE_ARB);
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, image.textureName);
     
-    CGLFlushDrawable(cglCtx);
+    // Draw a quad.
+    NSSize frameSize = image.textureSize;
+    glBegin(GL_QUADS);
+    glColor3f(1, 1, 1);
+    glTexCoord2f(0, 0);
+    glVertex2f(-1, -1);
+    glTexCoord2f(frameSize.width, 0);
+    glVertex2f(1, -1);
+    glTexCoord2f(frameSize.width, frameSize.height);
+    glVertex2f(1, 1);
+    glTexCoord2f(0, frameSize.height);
+    glVertex2f(-1, 1);
+    glEnd();
+    
+    // Finish drawing.
+    [self.openGLContext flushBuffer];
 }
 
 @end
