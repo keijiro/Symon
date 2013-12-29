@@ -35,6 +35,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0FC1E4A518700CE50051AF83 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		0FE15B17186ACEF400110D6F /* Symon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Symon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FE15B1A186ACEF400110D6F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		0FE15B1D186ACEF400110D6F /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -78,6 +79,7 @@
 				0FE15B20186ACEF400110D6F /* Symon */,
 				0FE15B19186ACEF400110D6F /* Frameworks */,
 				0FE15B18186ACEF400110D6F /* Products */,
+				0FC1E4A518700CE50051AF83 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
