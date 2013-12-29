@@ -75,20 +75,27 @@
     glDisable(GL_BLEND);
     glEnable(GL_TEXTURE_RECTANGLE_ARB);
     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, image.textureName);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     
     // Draw a quad.
-    NSSize frameSize = image.textureSize;
-    glBegin(GL_QUADS);
-    glColor3f(1, 1, 1);
-    glTexCoord2f(0, 0);
-    glVertex2f(-1, -1);
-    glTexCoord2f(frameSize.width, 0);
-    glVertex2f(1, -1);
-    glTexCoord2f(frameSize.width, frameSize.height);
-    glVertex2f(1, 1);
-    glTexCoord2f(0, frameSize.height);
-    glVertex2f(-1, 1);
-    glEnd();
+    static GLfloat vertices[] = {
+        -1, -1, 1, 1, 1, 0, 0,
+        +1, -1, 1, 1, 1, 0, 0,
+        +1, +1, 1, 1, 1, 0, 0,
+        -1, +1, 1, 1, 1, 0, 0
+    };
+    
+    vertices[12] = vertices[19] = image.textureSize.width;
+    vertices[20] = vertices[27] = image.textureSize.height;
+    
+    glVertexPointer(2, GL_FLOAT, sizeof(GLfloat) * 7, vertices);
+    glColorPointer(3, GL_FLOAT, sizeof(GLfloat) * 7, &vertices[2]);
+    glTexCoordPointer(2, GL_FLOAT, sizeof(GLfloat) * 7, &vertices[5]);
+    
+    static GLuint indices[] = { 0, 1, 2, 3 };
+    glDrawElements(GL_QUADS, 4, GL_UNSIGNED_INT, indices);
     
     // Finish drawing.
     [self.openGLContext flushBuffer];
