@@ -4,8 +4,9 @@
 
 @interface SymonGLView : NSOpenGLView
 
-- (void)connect:(NSDictionary *)description;
-
 @property (readonly) SyphonClient *client;
+@property (assign) BOOL enableVSync;
+
+- (void)connect:(NSDictionary *)description;
 
 @end

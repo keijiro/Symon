@@ -7,6 +7,7 @@
 @interface SymonGLView ()
 {
     SyphonClient *_client;
+    BOOL _vsync;
 }
 @end
 
@@ -14,6 +15,23 @@
 #pragma mark Class implementation
 
 @implementation SymonGLView
+
+#pragma mark Property accessor
+
+- (BOOL)enableVSync
+{
+    return _vsync;
+}
+
+- (void)setEnableVSync:(BOOL)flag
+{
+    if (_vsync != flag)
+    {
+        GLint interval = flag ? 1 : 0;
+        [self.openGLContext setValues:&interval forParameter:NSOpenGLCPSwapInterval];
+        _vsync = flag;
+    }
+}
 
 #pragma mark Public methods
 
