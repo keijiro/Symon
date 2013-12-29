@@ -88,7 +88,7 @@
                             <menuItem title="Enable VSync" id="4Jp-sg-1Au">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="toggleVSync:" target="FhG-lL-gEX" id="0yY-ea-dtD"/>
+                                    <action selector="toggleVSync:" target="494" id="nO5-kQ-sZE"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="gIR-Q9-l6I"/>

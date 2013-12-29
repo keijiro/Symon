@@ -9,7 +9,6 @@
     SyphonClient *_client;
     BOOL _vSync;
 }
-
 @end
 
 static NSString *vSyncDefaultKey = @"vSync";
@@ -19,15 +18,50 @@ static NSString *vSyncDefaultKey = @"vSync";
 
 @implementation SymonGLView
 
+#pragma mark Property accessors
+
+- (BOOL)vSync
+{
+    return _vSync;
+}
+
+- (void)setVSync:(BOOL)flag
+{
+    _vSync = flag;
+    [[NSUserDefaults standardUserDefaults] setBool:_vSync forKey:vSyncDefaultKey];
+    
+    GLint interval = _vSync ? 1 : 0;
+    [self.openGLContext setValues:&interval forParameter:NSOpenGLCPSwapInterval];
+}
+
+#pragma mark Public methods
+
+- (void)connect:(NSDictionary *)description;
+{
+    if (description)
+    {
+        // Create a new Syphon client with the server description.
+        _client = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
+            if (_vSync)
+                self.needsDisplay = YES;
+            else
+                [self drawSyphonFrame];
+        }];
+    }
+    else
+    {
+        _client = nil;
+    }
+}
+
 #pragma mark NSOpenGLView methods
 
 - (void)prepareOpenGL
 {
     [super prepareOpenGL];
     
-    // Apply VSync setting.
-    _vSync = [[NSUserDefaults standardUserDefaults] boolForKey:vSyncDefaultKey];
-    [self applyVSync];
+    // VSync setting.
+    self.vSync = [[NSUserDefaults standardUserDefaults] boolForKey:vSyncDefaultKey];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -46,48 +80,7 @@ static NSString *vSyncDefaultKey = @"vSync";
     }
 }
 
-#pragma mark Actions
-
-- (IBAction)toggleVSync:(id)sender
-{
-    _vSync = !_vSync;
-    [self applyVSync];
-    [[NSUserDefaults standardUserDefaults] setBool:_vSync forKey:vSyncDefaultKey];
-}
-
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
-{
-    if (menuItem.action == @selector(toggleVSync:))
-    {
-        menuItem.title = _vSync ? @"Disable VSync" : @"Enable VSync";
-    }
-    return YES;
-}
-
-#pragma mark Public methods
-
-- (void)connect:(NSDictionary *)description;
-{
-    if (description)
-    {
-        // Create a new Syphon client with the server description.
-        _client = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
-            [self drawSyphonFrame];
-        }];
-    }
-    else
-    {
-        _client = nil;
-    }
-}
-
 #pragma mark Private methods
-
-- (void)applyVSync
-{
-    GLint interval = _vSync ? 0 : 1;
-    [self.openGLContext setValues:&interval forParameter:NSOpenGLCPSwapInterval];
-}
 
 - (void)drawSyphonFrame
 {
