@@ -2,35 +2,66 @@
 #import <Syphon/Syphon.h>
 #import <OpenGL/OpenGL.h>
 
-#pragma mark Private variables
+#pragma mark Private declaration
 
 @interface SymonGLView ()
 {
     SyphonClient *_client;
-    BOOL _vsync;
+    BOOL _vSync;
 }
+
 @end
+
+static NSString *vSyncDefaultKey = @"vSync";
 
 #pragma mark
 #pragma mark Class implementation
 
 @implementation SymonGLView
 
-#pragma mark Property accessor
+#pragma mark NSOpenGLView methods
 
-- (BOOL)enableVSync
+- (void)prepareOpenGL
 {
-    return _vsync;
+    [super prepareOpenGL];
+    
+    // Apply VSync setting.
+    _vSync = [[NSUserDefaults standardUserDefaults] boolForKey:vSyncDefaultKey];
+    [self applyVSync];
 }
 
-- (void)setEnableVSync:(BOOL)flag
+- (void)drawRect:(NSRect)dirtyRect
 {
-    if (_vsync != flag)
+    // Clear the window if there is no valid connection.
+    if (!_client || !_client.isValid)
     {
-        GLint interval = flag ? 1 : 0;
-        [self.openGLContext setValues:&interval forParameter:NSOpenGLCPSwapInterval];
-        _vsync = flag;
+        glClearColor(0.5f, 0.5f, 0.5f, 0);
+        glClear(GL_COLOR_BUFFER_BIT);
+        [self.openGLContext flushBuffer];
     }
+    else if (_vSync)
+    {
+        // Draw the frame if VSync is enabled.
+        [self drawSyphonFrame];
+    }
+}
+
+#pragma mark Actions
+
+- (IBAction)toggleVSync:(id)sender
+{
+    _vSync = !_vSync;
+    [self applyVSync];
+    [[NSUserDefaults standardUserDefaults] setBool:_vSync forKey:vSyncDefaultKey];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    if (menuItem.action == @selector(toggleVSync:))
+    {
+        menuItem.title = _vSync ? @"Disable VSync" : @"Enable VSync";
+    }
+    return YES;
 }
 
 #pragma mark Public methods
@@ -50,29 +81,13 @@
     }
 }
 
-#pragma mark NSOpenGLView methods
+#pragma mark Private methods
 
-- (void)prepareOpenGL
+- (void)applyVSync
 {
-    [super prepareOpenGL];
-    
-    // Disable VSync.
-    GLint interval = 0;
+    GLint interval = _vSync ? 0 : 1;
     [self.openGLContext setValues:&interval forParameter:NSOpenGLCPSwapInterval];
 }
-
-- (void)drawRect:(NSRect)dirtyRect
-{
-    // Clear the window if there is no valid connection.
-    if (!_client || _client.isValid)
-    {
-        glClearColor(0.5f, 0.5f, 0.5f, 0);
-        glClear(GL_COLOR_BUFFER_BIT);
-        [self.openGLContext flushBuffer];
-    }
-}
-
-#pragma mark Private methods
 
 - (void)drawSyphonFrame
 {

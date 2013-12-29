@@ -19,15 +19,14 @@
     }
 }
 
-#pragma mark Message handling
+#pragma mark UI actions
 
-- (IBAction)serverSelect:(id)sender
+- (IBAction)selectServer:(id)sender
 {
-    // Connect to the chosen server.
-    NSArray *servers = SyphonServerDirectory.sharedDirectory.servers;
-    NSInteger index = [sender tag];
-    [_symonGLView connect:servers[index]];
+    [_symonGLView connect:[sender representedObject]];
 }
+
+#pragma mark Message handling
 
 - (void)serverAnnounced:(NSNotification *)notification
 {
@@ -73,6 +72,7 @@
         // No server case.
         item.title = @"No Server";
         item.action = nil;
+        item.keyEquivalent = @"";
     }
     else
     {
@@ -92,8 +92,12 @@
         }
         
         // Bind an action to the item.
-        item.action = @selector(serverSelect:);
-        item.tag = index;
+        item.action = @selector(selectServer:);
+        item.representedObject = description;
+        
+        // Numeric key shortcut.
+        item.keyEquivalent = [@(index + 1) stringValue];
+        item.keyEquivalentModifierMask = NSCommandKeyMask;
         
         // Put on-state mark if the server is currently used.
         id currentUUID = _symonGLView.client.serverDescription[SyphonServerDescriptionUUIDKey];
