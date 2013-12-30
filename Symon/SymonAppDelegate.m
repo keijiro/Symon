@@ -4,11 +4,38 @@
 
 @implementation SymonAppDelegate
 
+#pragma mark Private methods
+
+- (NSString *)makeServerDisplayName:(NSDictionary *)description
+{
+    NSString *appName = description[SyphonServerDescriptionAppNameKey];
+    NSString *serverName = description[SyphonServerDescriptionNameKey];
+    if (appName.length && serverName.length)
+        return [NSString stringWithFormat:@"%@ (%@)", appName, serverName];
+    else
+        return appName.length ? appName : serverName;
+}
+
+- (void)connectServer:(NSDictionary *)description
+{
+    // If no server was given, try to connect to the first server.
+    if (!description)
+        description = SyphonServerDirectory.sharedDirectory.servers.firstObject;
+    
+    [_symonGLView connect:description];
+
+    // Change the window title.
+    if (description)
+        self.window.title = [@"Symon - " stringByAppendingString:[self makeServerDisplayName:description]];
+    else
+        self.window.title = @"Symon";
+}
+
 #pragma mark UI actions
 
 - (IBAction)selectServer:(id)sender
 {
-    [_symonGLView connect:[sender representedObject]];
+    [self connectServer:[sender representedObject]];
 }
 
 - (IBAction)toggleVSync:(id)sender
@@ -27,7 +54,7 @@
 
 - (void)serverAnnounced:(NSNotification *)notification
 {
-    if (!_symonGLView.client) [_symonGLView connect:notification.object];
+    if (!_symonGLView.client) [self connectServer:notification.object];
 }
 
 - (void)serverRetired:(NSNotification *)notification
@@ -38,7 +65,7 @@
     if ([retired isEqualToString:current])
     {
         // Reconnect to an available server.
-        [_symonGLView connect:SyphonServerDirectory.sharedDirectory.servers.lastObject];
+        [self connectServer:nil];
     }
 }
 
@@ -51,7 +78,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverRetired:) name:SyphonServerRetireNotification object:nil];
     
     // Connect to an available server.
-    [_symonGLView connect:SyphonServerDirectory.sharedDirectory.servers.lastObject];
+    [self connectServer:nil];
 }
 
 #pragma mark NSMenuDelegate
