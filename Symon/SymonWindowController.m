@@ -4,8 +4,13 @@
 
 @interface SymonWindowController ()
 {
+    IBOutlet SymonGLView *_symonGLView;
     SyphonClient *_syphonClient;
+    BOOL _shouldClearScreen;
 }
+
+@property (assign) BOOL autoConnect;
+
 @end
 
 @implementation SymonWindowController
@@ -14,6 +19,10 @@
 
 - (void)awakeFromNib
 {
+    // Bind checkbox preferences to the properties.
+    NSUserDefaultsController *udc = [NSUserDefaultsController sharedUserDefaultsController];
+    [self bind:@"autoConnect" toObject:udc withKeyPath:@"values.autoConnect" options:nil];
+    
     // Notifications from Syphon.
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
     [nc addObserver:self selector:@selector(serverAnnounced:) name:SyphonServerAnnounceNotification object:nil];
@@ -32,23 +41,22 @@
 
 - (void)connectServer:(NSDictionary *)description
 {
-    // If no server was given, try to connect to the first server.
+    // If auto-connect is enabled, try to connect to the first server.
+    if (!description && _autoConnect)
+        description = SyphonServerDirectory.sharedDirectory.servers.firstObject;
+    
     if (!description)
     {
-        description = SyphonServerDirectory.sharedDirectory.servers.firstObject;
-        if (!description)
-        {
-            // Failed to connect; deactivate itself.
-            _syphonClient = nil;
-            _symonGLView.active = NO;
-            self.window.title = @"Symon";
-            return;
-        }
+        // Failed to connect; deactivate itself.
+        _syphonClient = nil;
+        _symonGLView.active = NO;
+        self.window.title = @"Symon";
+        return;
     }
 
     // Create a new Syphon client with the server description.
     _syphonClient = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
-        [_symonGLView retrieveFrameFrom:_syphonClient];
+        [_symonGLView receiveFrameFrom:_syphonClient];
     }];
     
     // Change the window title.
@@ -70,7 +78,7 @@
 - (void)serverAnnounced:(NSNotification *)notification
 {
     // A new server is announced; try to connect if it isn't connected to any server yet.
-    if (!_syphonClient) [self connectServer:notification.object];
+    if (!_syphonClient && _autoConnect) [self connectServer:notification.object];
 }
 
 - (void)serverRetired:(NSNotification *)notification

@@ -5,8 +5,7 @@
 @interface SymonGLView : NSOpenGLView
 
 @property (assign) BOOL active;
-@property (assign) BOOL vSync;
 
-- (void)retrieveFrameFrom:(SyphonClient *)syphonClient;
+- (void)receiveFrameFrom:(SyphonClient *)syphonClient;
 
 @end

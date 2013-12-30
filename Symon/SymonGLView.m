@@ -2,24 +2,50 @@
 #import <Syphon/Syphon.h>
 #import <OpenGL/OpenGL.h>
 
-#pragma mark Private declaration
+#pragma mark Private Declaration
 
 @interface SymonGLView ()
 {
     BOOL _active;
-    BOOL _vSync;
+    BOOL _shouldWaitInterval;
+    BOOL _shouldClearScreen;
+    NSColor *_clearColor;
+    GLfloat _clearColorRGB[3];
     SyphonImage *_frameImage;
 }
+
 @end
 
-static NSString *vSyncDefaultKey = @"vSync";
-
 #pragma mark
-#pragma mark Class implementation
 
 @implementation SymonGLView
 
-#pragma mark Property accessors
+#pragma mark NSOpenGLView methods
+
+- (void)awakeFromNib
+{
+    // Bind checkbox preferences to the properties.
+    NSUserDefaultsController *udc = [NSUserDefaultsController sharedUserDefaultsController];
+    [self bind:@"shouldWaitInterval" toObject:udc withKeyPath:@"values.shouldWaitInterval" options:nil];
+    [self bind:@"shouldClearScreen" toObject:udc withKeyPath:@"values.shouldClearScreen" options:nil];
+
+    // Bind color preferences to the color properties.
+    NSDictionary *options = [NSDictionary dictionaryWithObject:NSUnarchiveFromDataTransformerName
+                                                        forKey:NSValueTransformerNameBindingOption];
+    [self bind:@"clearColor" toObject:udc withKeyPath:@"values.clearColor" options:options];
+}
+
+- (void)prepareOpenGL
+{
+    [super prepareOpenGL];
+}
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+    [self drawFrameImage];
+}
+
+#pragma mark Public Properties
 
 - (BOOL)active
 {
@@ -31,52 +57,74 @@ static NSString *vSyncDefaultKey = @"vSync";
     _active = flag;
     
     // Dispose the last frame when disabled.
-    if (!_active)
+    if (!_active && _shouldClearScreen)
     {
         _frameImage = nil;
         self.needsDisplay = YES;
     }
 }
 
-- (BOOL)vSync
+#pragma mark Properties For Binding
+
+- (BOOL)shouldWaitInterval
 {
-    return _vSync;
+    return _shouldWaitInterval;
 }
 
-- (void)setVSync:(BOOL)flag
+- (void)setShouldWaitInterval:(BOOL)flag
 {
-    _vSync = flag;
-    [[NSUserDefaults standardUserDefaults] setBool:_vSync forKey:vSyncDefaultKey];
+    _shouldWaitInterval = flag;
     
-    GLint interval = _vSync ? 1 : 0;
+    // Change the VSync option on the GL context.
+    GLint interval = flag ? 1 : 0;
     [self.openGLContext setValues:&interval forParameter:NSOpenGLCPSwapInterval];
+}
+
+- (BOOL)shouldClearScreen
+{
+    return _shouldClearScreen;
+}
+
+- (void)setShouldClearScreen:(BOOL)flag
+{
+    _shouldClearScreen = flag;
+    
+    // Clear screen immediately.
+    if (flag && _frameImage)
+    {
+        _frameImage = nil;
+        self.needsDisplay = YES;
+    }
+}
+
+- (NSColor *)clearColor
+{
+    return _clearColor;
+}
+
+- (void)setClearColor:(NSColor *)color
+{
+    _clearColor = color;
+    
+    // Convert the colorspace.
+    NSColor *rgb = [color colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
+    _clearColorRGB[0] = rgb.redComponent;
+    _clearColorRGB[1] = rgb.greenComponent;
+    _clearColorRGB[2] = rgb.blueComponent;
+    
+    self.needsDisplay = !_active;
 }
 
 #pragma mark Public methods
 
-- (void)retrieveFrameFrom:(SyphonClient *)syphonClient
+- (void)receiveFrameFrom:(SyphonClient *)syphonClient
 {
     _frameImage = [syphonClient newFrameImageForContext:self.openGLContext.CGLContextObj];
     
-    if (_vSync)
+    if (_shouldWaitInterval)
         self.needsDisplay = YES;
     else
         [self drawFrameImage];
-}
-
-#pragma mark NSOpenGLView methods
-
-- (void)prepareOpenGL
-{
-    [super prepareOpenGL];
-    
-    // VSync setting.
-    self.vSync = [[NSUserDefaults standardUserDefaults] boolForKey:vSyncDefaultKey];
-}
-
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [self drawFrameImage];
 }
 
 #pragma mark Private methods
@@ -120,7 +168,7 @@ static NSString *vSyncDefaultKey = @"vSync";
     }
     else
     {
-        glClearColor(0.5f, 0.5f, 0.5f, 0);
+        glClearColor(_clearColorRGB[0], _clearColorRGB[1], _clearColorRGB[2], 0);
         glClear(GL_COLOR_BUFFER_BIT);
     }
     

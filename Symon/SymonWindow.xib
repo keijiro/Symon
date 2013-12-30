@@ -6,7 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="SymonWindowController">
             <connections>
-                <outlet property="symonGLView" destination="zoO-hG-vuj" id="MUn-My-OnG"/>
+                <outlet property="_symonGLView" destination="zoO-hG-vuj" id="lOX-Y9-WDF"/>
                 <outlet property="window" destination="1" id="7DH-vt-87D"/>
             </connections>
         </customObject>

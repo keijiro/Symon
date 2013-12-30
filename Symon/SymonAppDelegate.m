@@ -1,6 +1,5 @@
 #import "SymonAppDelegate.h"
 #import "SymonWindowController.h"
-#import "SymonGLView.h"
 #import <Syphon/Syphon.h>
 
 @interface SymonAppDelegate ()
@@ -18,19 +17,15 @@
     [_windowController connectServer:[sender representedObject]];
 }
 
-- (IBAction)toggleVSync:(id)sender
-{
-    _windowController.symonGLView.vSync = !_windowController.symonGLView.vSync;
-}
-
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
-{
-    if (menuItem.action == @selector(toggleVSync:))
-        menuItem.title = _windowController.symonGLView.vSync ? @"Disable VSync" : @"Enable VSync";
-    return YES;
-}
-
 #pragma mark NSApplicationDelegate
+
++ (void)initialize
+{
+    // Register the initial values for the user defaults.
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"UserDefaults" ofType:@"plist"];
+    NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:path];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dict];
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
