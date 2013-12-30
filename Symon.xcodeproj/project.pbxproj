@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0F9261BD1871596300B9DDB7 /* SymonWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9261BC1871596300B9DDB7 /* SymonWindowController.m */; };
+		0F9261BF187159F400B9DDB7 /* SymonWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F9261BE187159F400B9DDB7 /* SymonWindow.xib */; };
 		0FE15B1B186ACEF400110D6F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE15B1A186ACEF400110D6F /* Cocoa.framework */; };
 		0FE15B25186ACEF400110D6F /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FE15B23186ACEF400110D6F /* InfoPlist.strings */; };
 		0FE15B27186ACEF400110D6F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FE15B26186ACEF400110D6F /* main.m */; };
@@ -35,6 +37,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0F9261BB1871596300B9DDB7 /* SymonWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SymonWindowController.h; sourceTree = "<group>"; };
+		0F9261BC1871596300B9DDB7 /* SymonWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SymonWindowController.m; sourceTree = "<group>"; };
+		0F9261BE187159F400B9DDB7 /* SymonWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SymonWindow.xib; sourceTree = "<group>"; };
 		0FC1E4A518700CE50051AF83 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		0FE15B17186ACEF400110D6F /* Symon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Symon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FE15B1A186ACEF400110D6F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -121,7 +126,10 @@
 				0FE15B2D186ACEF400110D6F /* SymonAppDelegate.m */,
 				0FE15B54186AD0F000110D6F /* SymonGLView.h */,
 				0FE15B55186AD0F000110D6F /* SymonGLView.m */,
+				0F9261BB1871596300B9DDB7 /* SymonWindowController.h */,
+				0F9261BC1871596300B9DDB7 /* SymonWindowController.m */,
 				0FE15B2F186ACEF400110D6F /* MainMenu.xib */,
+				0F9261BE187159F400B9DDB7 /* SymonWindow.xib */,
 				0FE15B32186ACEF400110D6F /* Images.xcassets */,
 				0FE15B21186ACEF400110D6F /* Supporting Files */,
 			);
@@ -196,6 +204,7 @@
 			files = (
 				0FE15B25186ACEF400110D6F /* InfoPlist.strings in Resources */,
 				0FE15B33186ACEF400110D6F /* Images.xcassets in Resources */,
+				0F9261BF187159F400B9DDB7 /* SymonWindow.xib in Resources */,
 				0FE15B2B186ACEF400110D6F /* Credits.rtf in Resources */,
 				0FE15B31186ACEF400110D6F /* MainMenu.xib in Resources */,
 			);
@@ -208,6 +217,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F9261BD1871596300B9DDB7 /* SymonWindowController.m in Sources */,
 				0FE15B56186AD0F000110D6F /* SymonGLView.m in Sources */,
 				0FE15B27186ACEF400110D6F /* main.m in Sources */,
 				0FE15B2E186ACEF400110D6F /* SymonAppDelegate.m in Sources */,

@@ -1,84 +1,42 @@
 #import "SymonAppDelegate.h"
+#import "SymonWindowController.h"
 #import "SymonGLView.h"
 #import <Syphon/Syphon.h>
 
+@interface SymonAppDelegate ()
+{
+    SymonWindowController *_windowController;
+}
+@end
+
 @implementation SymonAppDelegate
-
-#pragma mark Private methods
-
-- (NSString *)makeServerDisplayName:(NSDictionary *)description
-{
-    NSString *appName = description[SyphonServerDescriptionAppNameKey];
-    NSString *serverName = description[SyphonServerDescriptionNameKey];
-    if (appName.length && serverName.length)
-        return [NSString stringWithFormat:@"%@ (%@)", appName, serverName];
-    else
-        return appName.length ? appName : serverName;
-}
-
-- (void)connectServer:(NSDictionary *)description
-{
-    // If no server was given, try to connect to the first server.
-    if (!description)
-        description = SyphonServerDirectory.sharedDirectory.servers.firstObject;
-    
-    [_symonGLView connect:description];
-
-    // Change the window title.
-    if (description)
-        self.window.title = [@"Symon - " stringByAppendingString:[self makeServerDisplayName:description]];
-    else
-        self.window.title = @"Symon";
-}
 
 #pragma mark UI actions
 
 - (IBAction)selectServer:(id)sender
 {
-    [self connectServer:[sender representedObject]];
+    [_windowController connectServer:[sender representedObject]];
 }
 
 - (IBAction)toggleVSync:(id)sender
 {
-    _symonGLView.vSync = !_symonGLView.vSync;
+    _windowController.symonGLView.vSync = !_windowController.symonGLView.vSync;
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
     if (menuItem.action == @selector(toggleVSync:))
-        menuItem.title = _symonGLView.vSync ? @"Disable VSync" : @"Enable VSync";
+        menuItem.title = _windowController.symonGLView.vSync ? @"Disable VSync" : @"Enable VSync";
     return YES;
-}
-
-#pragma mark Message handling
-
-- (void)serverAnnounced:(NSNotification *)notification
-{
-    if (!_symonGLView.client) [self connectServer:notification.object];
-}
-
-- (void)serverRetired:(NSNotification *)notification
-{
-    // Is it the current server?
-    NSString *retired = [notification.object objectForKey:SyphonServerDescriptionUUIDKey];
-    NSString *current = _symonGLView.client.serverDescription[SyphonServerDescriptionUUIDKey];
-    if ([retired isEqualToString:current])
-    {
-        // Reconnect to an available server.
-        [self connectServer:nil];
-    }
 }
 
 #pragma mark NSApplicationDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    // Notifications from Syphon.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverAnnounced:) name:SyphonServerAnnounceNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverRetired:) name:SyphonServerRetireNotification object:nil];
-    
-    // Connect to an available server.
-    [self connectServer:nil];
+    // Create a window.
+    _windowController = [[SymonWindowController alloc] initWithWindowNibName:@"SymonWindow"];
+    [_windowController showWindow:self];
 }
 
 #pragma mark NSMenuDelegate
@@ -120,7 +78,7 @@
         item.keyEquivalentModifierMask = NSCommandKeyMask;
         
         // Put on-state mark if the server is currently used.
-        id currentUUID = _symonGLView.client.serverDescription[SyphonServerDescriptionUUIDKey];
+        NSString *currentUUID = _windowController.serverUUID;
         item.state = [uuid isEqualTo:currentUUID] ? NSOnState : NSOffState;
     }
     return YES;

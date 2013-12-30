@@ -158,35 +158,7 @@
                 </menuItem>
             </items>
         </menu>
-        <window title="Symon" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="371">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
-            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="512" height="300"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
-            <view key="contentView" id="372">
-                <rect key="frame" x="0.0" y="0.0" width="512" height="300"/>
-                <autoresizingMask key="autoresizingMask"/>
-                <subviews>
-                    <openGLView colorSize="8bit_RGB" rendererType="accelerated" useAuxiliaryDepthBufferStencil="NO" useDoubleBufferingEnabled="YES" wantsBestResolutionOpenGLSurface="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FhG-lL-gEX" customClass="SymonGLView">
-                        <rect key="frame" x="0.0" y="0.0" width="512" height="300"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    </openGLView>
-                </subviews>
-                <constraints>
-                    <constraint firstItem="FhG-lL-gEX" firstAttribute="leading" secondItem="372" secondAttribute="leading" id="Ang-1D-MlW"/>
-                    <constraint firstAttribute="trailing" secondItem="FhG-lL-gEX" secondAttribute="trailing" id="OCF-Fd-7eo"/>
-                    <constraint firstAttribute="bottom" secondItem="FhG-lL-gEX" secondAttribute="bottom" id="VEG-g9-wzr"/>
-                    <constraint firstItem="FhG-lL-gEX" firstAttribute="top" secondItem="372" secondAttribute="top" id="Viu-nf-mMg"/>
-                </constraints>
-            </view>
-        </window>
-        <customObject id="494" customClass="SymonAppDelegate">
-            <connections>
-                <outlet property="symonGLView" destination="FhG-lL-gEX" id="TXu-AA-WPO"/>
-                <outlet property="window" destination="371" id="532"/>
-            </connections>
-        </customObject>
+        <customObject id="494" customClass="SymonAppDelegate"/>
         <customObject id="420" customClass="NSFontManager"/>
     </objects>
 </document>
