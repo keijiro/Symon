@@ -51,6 +51,7 @@ static NSString *vSyncDefaultKey = @"vSync";
     else
     {
         _client = nil;
+        self.needsDisplay = YES;
     }
 }
 
