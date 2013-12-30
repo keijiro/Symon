@@ -2,11 +2,12 @@
 #import "SymonGLView.h"
 #import <Syphon/Syphon.h>
 
+#pragma mark Private Interface
+
 @interface SymonWindowController ()
 {
     IBOutlet SymonGLView *_symonGLView;
     SyphonClient *_syphonClient;
-    BOOL _shouldClearScreen;
 }
 
 @property (assign) BOOL autoConnect;
@@ -15,7 +16,7 @@
 
 @implementation SymonWindowController
 
-#pragma mark NSWindowController
+#pragma mark NSWindowController Methods
 
 - (void)awakeFromNib
 {
@@ -32,11 +33,50 @@
     [self connectServer:nil];
 }
 
-#pragma mark Public Methods
+#pragma mark Syphon Server Notifications
+
+- (void)serverAnnounced:(NSNotification *)notification
+{
+    // A new server is announced; try to connect if it isn't connected to any server yet.
+    if (!_syphonClient && _autoConnect) [self connectServer:notification.object];
+}
+
+- (void)serverRetired:(NSNotification *)notification
+{
+    // A server is retired; if it's the current one, try to connect to an available server.
+    NSString *uuid = [notification.object objectForKey:SyphonServerDescriptionUUIDKey];
+    if ([uuid isEqualToString:self.serverUUID]) [self connectServer:nil];
+}
+
+#pragma mark UI Actions
+
+- (void)selectServer:(id)sender
+{
+    [self connectServer:[sender representedObject]];
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)item {
+    NSDictionary *description = item.representedObject;
+    NSString *uuid = description[SyphonServerDescriptionUUIDKey];
+    item.state = [uuid isEqualToString:self.serverUUID] ? NSOnState : NSOffState;
+    return YES;
+}
+
+#pragma mark Private Methods
 
 - (NSString *)serverUUID
 {
     return _syphonClient.serverDescription[SyphonServerDescriptionUUIDKey];
+}
+
+- (NSString *)makeServerDisplayName:(NSDictionary *)description
+{
+    NSString *appName = description[SyphonServerDescriptionAppNameKey];
+    NSString *serverName = description[SyphonServerDescriptionNameKey];
+    if (appName.length && serverName.length)
+        return [NSString stringWithFormat:@"%@ (%@)", appName, serverName];
+    else
+        return appName.length ? appName : serverName;
 }
 
 - (void)connectServer:(NSDictionary *)description
@@ -53,7 +93,7 @@
         self.window.title = @"Symon";
         return;
     }
-
+    
     // Create a new Syphon client with the server description.
     _syphonClient = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
         [_symonGLView receiveFrameFrom:_syphonClient];
@@ -61,31 +101,6 @@
     
     // Change the window title.
     self.window.title = [@"Symon - " stringByAppendingString:[self makeServerDisplayName:description]];
-}
-
-#pragma mark Private Methods
-
-- (NSString *)makeServerDisplayName:(NSDictionary *)description
-{
-    NSString *appName = description[SyphonServerDescriptionAppNameKey];
-    NSString *serverName = description[SyphonServerDescriptionNameKey];
-    if (appName.length && serverName.length)
-        return [NSString stringWithFormat:@"%@ (%@)", appName, serverName];
-    else
-        return appName.length ? appName : serverName;
-}
-
-- (void)serverAnnounced:(NSNotification *)notification
-{
-    // A new server is announced; try to connect if it isn't connected to any server yet.
-    if (!_syphonClient && _autoConnect) [self connectServer:notification.object];
-}
-
-- (void)serverRetired:(NSNotification *)notification
-{
-    // A server is retired; if it's the current one, try to connect to an available server.
-    NSString *uuid = [notification.object objectForKey:SyphonServerDescriptionUUIDKey];
-    if ([uuid isEqualToString:self.serverUUID]) [self connectServer:nil];
 }
 
 @end

@@ -2,7 +2,7 @@
 #import <Syphon/Syphon.h>
 #import <OpenGL/OpenGL.h>
 
-#pragma mark Private Declaration
+#pragma mark Private Interface
 
 @interface SymonGLView ()
 {
@@ -13,14 +13,13 @@
     GLfloat _clearColorRGB[3];
     SyphonImage *_frameImage;
 }
-
 @end
 
 #pragma mark
 
 @implementation SymonGLView
 
-#pragma mark NSOpenGLView methods
+#pragma mark NSOpenGLView Methods
 
 - (void)awakeFromNib
 {
@@ -115,7 +114,7 @@
     self.needsDisplay = !_active;
 }
 
-#pragma mark Public methods
+#pragma mark Public Methods
 
 - (void)receiveFrameFrom:(SyphonClient *)syphonClient
 {
@@ -127,7 +126,7 @@
         [self drawFrameImage];
 }
 
-#pragma mark Private methods
+#pragma mark Private Methods
 
 - (void)drawFrameImage
 {

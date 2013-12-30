@@ -4,7 +4,7 @@
 
 @interface SymonAppDelegate ()
 {
-    SymonWindowController *_windowController;
+    NSMutableArray *_windowControllers;
 }
 @end
 
@@ -12,9 +12,11 @@
 
 #pragma mark UI actions
 
-- (IBAction)selectServer:(id)sender
+- (void)newDocument:(id)sender
 {
-    [_windowController connectServer:[sender representedObject]];
+    SymonWindowController *newController = [[SymonWindowController alloc] initWithWindowNibName:@"SymonWindow"];
+    [newController showWindow:self];
+    [_windowControllers addObject:newController];
 }
 
 #pragma mark NSApplicationDelegate
@@ -29,9 +31,10 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    // Create a window.
-    _windowController = [[SymonWindowController alloc] initWithWindowNibName:@"SymonWindow"];
-    [_windowController showWindow:self];
+    _windowControllers = [NSMutableArray array];
+
+    // Create the initial window.
+    [self newDocument:nil];
 }
 
 #pragma mark NSMenuDelegate
@@ -56,7 +59,6 @@
         NSDictionary *description = servers[index];
         NSString *appName = description[SyphonServerDescriptionAppNameKey];
         NSString *serverName = description[SyphonServerDescriptionNameKey];
-        NSString *uuid = description[SyphonServerDescriptionUUIDKey];
         
         // Make a title for the item.
         if (appName.length && serverName.length)
@@ -65,16 +67,12 @@
             item.title = appName.length ? appName : serverName;
         
         // Bind an action to the item.
-        item.action = @selector(selectServer:);
+        item.action = NSSelectorFromString(@"selectServer:");
         item.representedObject = description;
         
         // Numeric key shortcut.
         item.keyEquivalent = [@(index + 1) stringValue];
         item.keyEquivalentModifierMask = NSCommandKeyMask;
-        
-        // Put on-state mark if the server is currently used.
-        NSString *currentUUID = _windowController.serverUUID;
-        item.state = [uuid isEqualTo:currentUUID] ? NSOnState : NSOffState;
     }
     return YES;
 }
