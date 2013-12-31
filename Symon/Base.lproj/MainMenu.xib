@@ -157,17 +157,17 @@
         </menu>
         <customObject id="494" customClass="SymonAppDelegate"/>
         <customObject id="420" customClass="NSFontManager"/>
-        <window title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="Cl9-OP-mjd" customClass="NSPanel">
+        <window title="Symon Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="Cl9-OP-mjd" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="210" y="653" width="335" height="149"/>
+            <rect key="contentRect" x="210" y="653" width="423" height="205"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
             <view key="contentView" id="eMN-kC-F5D">
-                <rect key="frame" x="0.0" y="0.0" width="335" height="149"/>
+                <rect key="frame" x="0.0" y="0.0" width="423" height="205"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="5RW-pj-XBm">
-                        <rect key="frame" x="18" y="113" width="256" height="18"/>
+                        <rect key="frame" x="62" y="165" width="256" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Enable vertical blank synchronization" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ZH5-GV-wNF">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -177,11 +177,53 @@
                             <binding destination="qbG-Cw-kvP" name="value" keyPath="values.shouldWaitInterval" id="kew-yu-MkG"/>
                         </connections>
                     </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="VZM-Nl-Lew">
+                        <rect key="frame" x="62" y="145" width="146" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Correct aspect ratio" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lsd-yo-oGl">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="qbG-Cw-kvP" name="value" keyPath="values.aspectRatioCorrection" id="zMP-D2-cuE"/>
+                        </connections>
+                    </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="my1-WC-oeq">
+                        <rect key="frame" x="62" y="107" width="299" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Automatically connect to an available server" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Pyp-fo-d2X">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="qbG-Cw-kvP" name="value" keyPath="values.autoConnect" id="idD-3j-ZYP"/>
+                        </connections>
+                    </button>
+                    <button translatesAutoresizingMaskIntoConstraints="NO" id="xEi-0n-kFX">
+                        <rect key="frame" x="62" y="69" width="224" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Clear screen when disconnected" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="tRq-Ui-cAX">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <binding destination="qbG-Cw-kvP" name="value" keyPath="values.shouldClearScreen" id="qJk-Nn-qbS"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SHI-lX-dWe">
+                        <rect key="frame" x="79" y="30" width="77" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Clear color:" id="OkK-C2-4ys">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                     <colorWell translatesAutoresizingMaskIntoConstraints="NO" id="QUF-jl-3FB">
-                        <rect key="frame" x="101" y="19" width="44" height="20"/>
+                        <rect key="frame" x="162" y="28" width="40" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="44" id="qTx-U7-xBX"/>
+                            <constraint firstAttribute="width" constant="40" id="vnW-j7-HNl"/>
                         </constraints>
                         <color key="color" red="0.05813049898" green="0.055541899059999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
@@ -192,50 +234,21 @@
                             </binding>
                         </connections>
                     </colorWell>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="xEi-0n-kFX">
-                        <rect key="frame" x="18" y="53" width="248" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Clear the screen when disconnected" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="tRq-Ui-cAX">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="qbG-Cw-kvP" name="value" keyPath="values.shouldClearScreen" id="qJk-Nn-qbS"/>
-                        </connections>
-                    </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SHI-lX-dWe">
-                        <rect key="frame" x="18" y="20" width="77" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Clear color:" id="OkK-C2-4ys">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="my1-WC-oeq">
-                        <rect key="frame" x="18" y="83" width="299" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Automatically connect to an available server" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Pyp-fo-d2X">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="qbG-Cw-kvP" name="value" keyPath="values.autoConnect" id="idD-3j-ZYP"/>
-                        </connections>
-                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="xEi-0n-kFX" firstAttribute="top" secondItem="my1-WC-oeq" secondAttribute="bottom" constant="16" id="4IF-d4-3fm"/>
-                    <constraint firstItem="my1-WC-oeq" firstAttribute="leading" secondItem="5RW-pj-XBm" secondAttribute="leading" id="FyG-cK-2xs"/>
-                    <constraint firstItem="5RW-pj-XBm" firstAttribute="leading" secondItem="eMN-kC-F5D" secondAttribute="leading" constant="20" symbolic="YES" id="H8b-hh-cq0"/>
-                    <constraint firstAttribute="bottom" secondItem="SHI-lX-dWe" secondAttribute="bottom" constant="20" symbolic="YES" id="Iz3-6I-Ots"/>
-                    <constraint firstItem="xEi-0n-kFX" firstAttribute="leading" secondItem="SHI-lX-dWe" secondAttribute="leading" id="KAN-Bz-G9F"/>
-                    <constraint firstAttribute="bottom" secondItem="QUF-jl-3FB" secondAttribute="bottom" constant="19" id="TJs-Rt-kfc"/>
-                    <constraint firstItem="5RW-pj-XBm" firstAttribute="top" secondItem="eMN-kC-F5D" secondAttribute="top" constant="20" symbolic="YES" id="a76-ZA-Rrz"/>
-                    <constraint firstItem="xEi-0n-kFX" firstAttribute="leading" secondItem="my1-WC-oeq" secondAttribute="leading" id="bHg-TC-ozz"/>
-                    <constraint firstItem="my1-WC-oeq" firstAttribute="top" secondItem="5RW-pj-XBm" secondAttribute="bottom" constant="16" id="n4Q-OI-7qz"/>
-                    <constraint firstItem="QUF-jl-3FB" firstAttribute="leading" secondItem="SHI-lX-dWe" secondAttribute="trailing" constant="8" symbolic="YES" id="n91-dY-iTI"/>
-                    <constraint firstItem="QUF-jl-3FB" firstAttribute="top" secondItem="xEi-0n-kFX" secondAttribute="bottom" constant="16" id="yaw-PC-D92"/>
+                    <constraint firstItem="xEi-0n-kFX" firstAttribute="top" secondItem="my1-WC-oeq" secondAttribute="bottom" constant="24" id="7Gs-gE-TMw"/>
+                    <constraint firstItem="QUF-jl-3FB" firstAttribute="leading" secondItem="SHI-lX-dWe" secondAttribute="trailing" constant="8" symbolic="YES" id="BUE-mt-er1"/>
+                    <constraint firstItem="5RW-pj-XBm" firstAttribute="leading" secondItem="eMN-kC-F5D" secondAttribute="leading" constant="64" id="Bee-GE-tBp"/>
+                    <constraint firstItem="VZM-Nl-Lew" firstAttribute="top" secondItem="5RW-pj-XBm" secondAttribute="bottom" constant="6" symbolic="YES" id="Lfs-0x-T8d"/>
+                    <constraint firstItem="5RW-pj-XBm" firstAttribute="top" secondItem="eMN-kC-F5D" secondAttribute="top" constant="24" id="MOu-8k-WDJ"/>
+                    <constraint firstItem="VZM-Nl-Lew" firstAttribute="leading" secondItem="xEi-0n-kFX" secondAttribute="leading" id="Mtp-CO-m8B"/>
+                    <constraint firstItem="VZM-Nl-Lew" firstAttribute="leading" secondItem="5RW-pj-XBm" secondAttribute="leading" id="Oox-MW-nNC"/>
+                    <constraint firstItem="VZM-Nl-Lew" firstAttribute="leading" secondItem="my1-WC-oeq" secondAttribute="leading" id="b3j-Dl-tWX"/>
+                    <constraint firstItem="SHI-lX-dWe" firstAttribute="top" secondItem="xEi-0n-kFX" secondAttribute="bottom" constant="24" id="gA2-s7-zZD"/>
+                    <constraint firstItem="my1-WC-oeq" firstAttribute="top" secondItem="VZM-Nl-Lew" secondAttribute="bottom" constant="24" id="n3r-ap-v0b"/>
+                    <constraint firstItem="QUF-jl-3FB" firstAttribute="top" secondItem="xEi-0n-kFX" secondAttribute="bottom" constant="23" id="oL3-ou-uv3"/>
+                    <constraint firstItem="SHI-lX-dWe" firstAttribute="centerY" secondItem="QUF-jl-3FB" secondAttribute="centerY" id="w12-u4-o8p"/>
+                    <constraint firstItem="SHI-lX-dWe" firstAttribute="leading" secondItem="eMN-kC-F5D" secondAttribute="leading" constant="81" id="yc5-Um-YpG"/>
                 </constraints>
             </view>
         </window>
