@@ -56,9 +56,16 @@
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item {
-    NSDictionary *description = item.representedObject;
-    NSString *uuid = description[SyphonServerDescriptionUUIDKey];
-    item.state = [uuid isEqualToString:self.serverUUID] ? NSOnState : NSOffState;
+    if (_syphonClient)
+    {
+        NSDictionary *description = item.representedObject;
+        NSString *uuid = description[SyphonServerDescriptionUUIDKey];
+        item.state = [uuid isEqualToString:self.serverUUID] ? NSOnState : NSOffState;
+    }
+    else
+    {
+        item.state = NSOffState;
+    }
     return YES;
 }
 
