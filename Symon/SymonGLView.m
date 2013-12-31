@@ -26,6 +26,8 @@
 
 - (void)awakeFromNib
 {
+    [super awakeFromNib];
+    
     // Bind checkbox preferences to the properties.
     NSUserDefaultsController *udc = [NSUserDefaultsController sharedUserDefaultsController];
     [self bind:@"shouldWaitInterval" toObject:udc withKeyPath:@"values.shouldWaitInterval" options:nil];

@@ -18,8 +18,10 @@
 
 #pragma mark NSWindowController Methods
 
-- (void)awakeFromNib
+- (void)windowDidLoad
 {
+    [super windowDidLoad];
+    
     // Bind checkbox preferences to the properties.
     NSUserDefaultsController *udc = [NSUserDefaultsController sharedUserDefaultsController];
     [self bind:@"autoConnect" toObject:udc withKeyPath:@"values.autoConnect" options:nil];
@@ -31,6 +33,13 @@
     
     // Connect to an available server.
     [self connectServer:nil];
+}
+
+- (BOOL)windowShouldClose:(id)sender
+{
+    // Stop the Syphon client on closing.
+    _syphonClient = nil;
+    return YES;
 }
 
 #pragma mark Syphon Server Notifications
@@ -92,7 +101,20 @@
     if (!description && _autoConnect)
         description = SyphonServerDirectory.sharedDirectory.servers.firstObject;
     
-    if (!description)
+    if (description)
+    {
+        // Activate the GL view.
+        _symonGLView.active = YES;
+        
+        // Create a new Syphon client with the server description.
+        _syphonClient = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
+            [_symonGLView receiveFrameFrom:_syphonClient];
+        }];
+        
+        // Change the window title.
+        self.window.title = [@"Symon - " stringByAppendingString:[self makeServerDisplayName:description]];
+    }
+    else
     {
         // Failed to connect; deactivate itself.
         _syphonClient = nil;
@@ -100,14 +122,6 @@
         self.window.title = @"Symon";
         return;
     }
-    
-    // Create a new Syphon client with the server description.
-    _syphonClient = [[SyphonClient alloc] initWithServerDescription:description options:nil newFrameHandler:^(SyphonClient *client){
-        [_symonGLView receiveFrameFrom:_syphonClient];
-    }];
-    
-    // Change the window title.
-    self.window.title = [@"Symon - " stringByAppendingString:[self makeServerDisplayName:description]];
 }
 
 @end

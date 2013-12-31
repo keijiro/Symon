@@ -14,9 +14,17 @@
 
 - (void)newDocument:(id)sender
 {
+    // Create a window and add it to the window list.
     SymonWindowController *newController = [[SymonWindowController alloc] initWithWindowNibName:@"SymonWindow"];
-    [newController showWindow:self];
     [_windowControllers addObject:newController];
+    
+    // Show the window
+    [newController showWindow:self];
+}
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+    [_windowControllers removeObject:[notification.object windowController]];
 }
 
 #pragma mark NSApplicationDelegate
@@ -32,6 +40,9 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     _windowControllers = [NSMutableArray array];
+
+    // Observe window closing.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:nil];
 
     // Create the initial window.
     [self newDocument:nil];
