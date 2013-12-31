@@ -41,6 +41,9 @@
 - (void)prepareOpenGL
 {
     [super prepareOpenGL];
+    
+    // Reapply the VSync option.
+    self.shouldWaitInterval = _shouldWaitInterval;
 }
 
 - (void)drawRect:(NSRect)dirtyRect
