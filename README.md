@@ -4,7 +4,7 @@ Symon
 ![Screenshot](http://keijiro.github.io/Symon/screenshot.png)
 
 *Symon* is a minimal [Syphon](http://syphon.v002.info) client app. It's basically a
-clone of (Syphon's Simple Client app)[https://github.com/Syphon/Simple] but has some
+clone of [Syphon Simple Client app](https://github.com/Syphon/Simple) but has some
 additional features.
 
 - Mavericks style full-screen mode support.
@@ -18,7 +18,7 @@ Download
 [Symon version 0.6](http://keijiro.github.io/Symon/symon-0.7.zip)
 
 
-TIPS
+Tips
 ----
 
 - You can change the connection with keyboard shortcuts: ⌘+num
