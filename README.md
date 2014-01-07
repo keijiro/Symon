@@ -15,8 +15,7 @@ additional features.
 Download
 --------
 
-[Symon version 0.6](http://keijiro.github.io/Symon/symon-0.7.zip)
-
+[Symon version 0.71](http://keijiro.github.io/Symon/symon-0.71.zip)
 
 Tips
 ----
