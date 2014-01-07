@@ -15,6 +15,7 @@
 }
 
 @property (assign) BOOL aspectRatioCorrection;
+@property (assign) BOOL gammaCorrection;
 
 @end
 
@@ -33,6 +34,7 @@
     [self bind:@"shouldWaitInterval" toObject:udc withKeyPath:@"values.shouldWaitInterval" options:nil];
     [self bind:@"aspectRatioCorrection" toObject:udc withKeyPath:@"values.aspectRatioCorrection" options:nil];
     [self bind:@"shouldClearScreen" toObject:udc withKeyPath:@"values.shouldClearScreen" options:nil];
+    [self bind:@"gammaCorrection" toObject:udc withKeyPath:@"values.gammaCorrection" options:nil];
 
     // Bind color preferences to the color properties.
     NSDictionary *options = [NSDictionary dictionaryWithObject:NSUnarchiveFromDataTransformerName
@@ -172,6 +174,12 @@
             glClearColor(_clearColorRGB[0], _clearColorRGB[1], _clearColorRGB[2], 0);
             glClear(GL_COLOR_BUFFER_BIT);
         }
+        
+        // Gamma correction.
+        if (_gammaCorrection)
+            glEnable(GL_FRAMEBUFFER_SRGB);
+        else
+            glDisable(GL_FRAMEBUFFER_SRGB);
         
         // Draw context settings.
         glDisable(GL_BLEND);
