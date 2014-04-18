@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="4514" systemVersion="13B3116" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="4514"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="5056"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -160,14 +160,14 @@
         <window title="Symon Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="Cl9-OP-mjd" customClass="NSPanel">
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="210" y="653" width="423" height="213"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="900"/>
+            <rect key="contentRect" x="210" y="653" width="423" height="198"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1280" height="778"/>
             <view key="contentView" id="eMN-kC-F5D">
-                <rect key="frame" x="0.0" y="0.0" width="423" height="213"/>
+                <rect key="frame" x="0.0" y="0.0" width="423" height="198"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="5RW-pj-XBm">
-                        <rect key="frame" x="62" y="177" width="256" height="18"/>
+                    <button verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="5RW-pj-XBm">
+                        <rect key="frame" x="62" y="157" width="256" height="23"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Enable vertical blank synchronization" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="ZH5-GV-wNF">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -178,7 +178,7 @@
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="VZM-Nl-Lew">
-                        <rect key="frame" x="62" y="157" width="146" height="18"/>
+                        <rect key="frame" x="62" y="137" width="146" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Correct aspect ratio" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="lsd-yo-oGl">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -186,17 +186,6 @@
                         </buttonCell>
                         <connections>
                             <binding destination="qbG-Cw-kvP" name="value" keyPath="values.aspectRatioCorrection" id="zMP-D2-cuE"/>
-                        </connections>
-                    </button>
-                    <button translatesAutoresizingMaskIntoConstraints="NO" id="HRn-p8-X07">
-                        <rect key="frame" x="62" y="137" width="183" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Enable gamma correction" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="uVq-J2-Swq">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="qbG-Cw-kvP" name="value" keyPath="values.gammaCorrection" id="e9z-EL-D07"/>
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="my1-WC-oeq">
@@ -248,20 +237,19 @@
                     </colorWell>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="my1-WC-oeq" firstAttribute="top" secondItem="VZM-Nl-Lew" secondAttribute="bottom" constant="24" id="6Dp-4i-KRd"/>
                     <constraint firstItem="QUF-jl-3FB" firstAttribute="centerY" secondItem="SHI-lX-dWe" secondAttribute="centerY" id="K9P-2m-ykK"/>
                     <constraint firstItem="VZM-Nl-Lew" firstAttribute="leading" secondItem="xEi-0n-kFX" secondAttribute="leading" id="P36-fQ-yLU"/>
                     <constraint firstItem="SHI-lX-dWe" firstAttribute="top" secondItem="xEi-0n-kFX" secondAttribute="bottom" constant="24" id="U3I-83-yYi"/>
                     <constraint firstItem="xEi-0n-kFX" firstAttribute="top" secondItem="my1-WC-oeq" secondAttribute="bottom" constant="24" id="W3f-s7-SYu"/>
                     <constraint firstItem="QUF-jl-3FB" firstAttribute="leading" secondItem="SHI-lX-dWe" secondAttribute="trailing" constant="8" symbolic="YES" id="XWr-nQ-3lS"/>
-                    <constraint firstItem="VZM-Nl-Lew" firstAttribute="leading" secondItem="HRn-p8-X07" secondAttribute="leading" id="YtH-2Z-PK7"/>
                     <constraint firstItem="SHI-lX-dWe" firstAttribute="leading" secondItem="eMN-kC-F5D" secondAttribute="leading" constant="92" id="ZEX-FP-YJE"/>
-                    <constraint firstItem="HRn-p8-X07" firstAttribute="top" secondItem="VZM-Nl-Lew" secondAttribute="bottom" constant="6" symbolic="YES" id="eih-aG-vrX"/>
                     <constraint firstItem="VZM-Nl-Lew" firstAttribute="top" secondItem="5RW-pj-XBm" secondAttribute="bottom" constant="6" symbolic="YES" id="g0e-T8-XHQ"/>
                     <constraint firstItem="VZM-Nl-Lew" firstAttribute="leading" secondItem="my1-WC-oeq" secondAttribute="leading" id="gqB-uO-NFe"/>
-                    <constraint firstItem="my1-WC-oeq" firstAttribute="top" secondItem="HRn-p8-X07" secondAttribute="bottom" constant="24" id="hBs-2m-FCk"/>
                     <constraint firstItem="5RW-pj-XBm" firstAttribute="top" secondItem="eMN-kC-F5D" secondAttribute="top" constant="20" symbolic="YES" id="kVY-Md-cxs"/>
                     <constraint firstItem="5RW-pj-XBm" firstAttribute="leading" secondItem="eMN-kC-F5D" secondAttribute="leading" constant="64" id="rRm-nI-ULh"/>
                     <constraint firstItem="VZM-Nl-Lew" firstAttribute="leading" secondItem="5RW-pj-XBm" secondAttribute="leading" id="txM-qW-MlY"/>
+                    <constraint firstAttribute="bottom" secondItem="QUF-jl-3FB" secondAttribute="bottom" constant="20" symbolic="YES" id="vgw-49-vaF"/>
                 </constraints>
             </view>
         </window>
