@@ -8,8 +8,10 @@
 {
     IBOutlet SymonGLView *_symonGLView;
     SyphonClient *_syphonClient;
+    BOOL _keepTop;
 }
 
+@property (assign) BOOL keepTop;
 @property (assign) BOOL autoConnect;
 
 @end
@@ -24,6 +26,7 @@
     
     // Bind checkbox preferences to the properties.
     NSUserDefaultsController *udc = [NSUserDefaultsController sharedUserDefaultsController];
+    [self bind:@"keepTop" toObject:udc withKeyPath:@"values.keepTop" options:nil];
     [self bind:@"autoConnect" toObject:udc withKeyPath:@"values.autoConnect" options:nil];
     
     // Notifications from Syphon.
@@ -40,6 +43,19 @@
     // Stop the Syphon client on closing.
     _syphonClient = nil;
     return YES;
+}
+
+#pragma mark Window Properties
+
+- (BOOL)keepTop
+{
+    return _keepTop;
+}
+
+- (void)setKeepTop:(BOOL)keepTop
+{
+    _keepTop = keepTop;
+    [self.window setLevel:(keepTop ? NSFloatingWindowLevel : NSNormalWindowLevel)];
 }
 
 #pragma mark Syphon Server Notifications
